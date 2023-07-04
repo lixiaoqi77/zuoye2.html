@@ -1,0 +1,85 @@
+body {
+    font-family: Arial, sans-serif;
+    border: 10px solid pink;
+    margin: 0px;
+    background-color:antiquewhite;
+}
+div li{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+}
+.label{
+    color: #ccc;
+    border: 2px solid rgb(126, 159, 202);
+    border-radius: 4px;
+    padding: 4px;
+}
+.button{
+    border: 3px solid rgb(126, 204, 233);
+    color: rgb(204, 127, 199);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-weight: bold;
+}
+#wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+ #main {
+    flex: 70%;
+    padding: 20px;
+}
+ #sidebar {
+    flex: 30%;
+       padding: 20px;
+       border-left: 2px solid #ccc;
+}
+#header {
+    display: flex;
+    justify-content: space-between;
+}
+.logo {
+    font-size: 35px;
+    color: #333;
+}
+.icons {
+    list-style: none;
+    padding: 0;
+}
+.icons li {
+    display: inline-block;
+    margin-left: 10px;
+}
+#banner {
+    margin-top: 20px;
+}
+.button{
+    text-decoration: none;
+}
+.features {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.features article {
+    flex: 24%;
+}
+.posts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.posts article {
+    flex: 32%;
+    margin-bottom: 20px;
+}
+#menu {
+    margin-top: 20px;
+}
+#footer {
+    margin-top: 20px;
+    text-align: center;
+}
