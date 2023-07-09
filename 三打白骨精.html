@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>三打白骨精</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #game-container {
+            position: relative;
+            width: 100vw; height: 100vh; 
+            background-image: url('背景.jpg'); 
+            background-size: cover;
+        }
+        #start-game {
+            position: absolute;
+            top: 45%;left: 50%;
+            width: 50%;height: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #gold-rodent {
+            position: absolute;
+            width: 10%;height: 10%;
+            cursor: url("金箍棒1.png"), auto; 
+            display: none;
+        }
+        #evil-spirit {
+            position: absolute;
+            width: 10%;height: 20%;
+            display: none;
+        }
+        #game-over {
+            position: absolute;
+            display: none;
+            width: 100%;height: 100%;
+            top: 50%;left: 50%;
+            transform: translate(-50%, -50%); 
+        }
+        #countdown {
+        color: red; /* 修改文字颜色为红色 */
+        background-color: black; /* 修改背景颜色为黑色 */
+        padding: 10px; /* 增加内边距 */
+        border-radius: 5px; /* 圆角边框 */
+        }
+        #game-fail{
+        position: absolute;
+        display: none; 
+        width: 100%; height: 100%; top: 50%; left: 50%; 
+        transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <img src="开始游戏.png" alt="开始游戏" id="start-game">
+        <img src="金箍棒.png" alt="金箍棒" id="gold-rodent">
+        <img src="白骨精.png" alt="白骨精" id="evil-spirit">
+        <img src="游戏成功.png" alt="游戏成功" id="game-over">
+        <img src="游戏失败.png" alt="游戏失败" id="game-fail" >
+    </div>
+    <div id="countdown" style="position: absolute; top: 0; right: 0; font-size: 30px;"></div>
+    <script>
+        const startGameButton = document.getElementById("start-game");
+        const goldRodentImage = document.getElementById("gold-rodent");
+        const evilSpiritImage = document.getElementById("evil-spirit");
+        const gameOverImage = document.getElementById("game-over");
+
+        let score = 0;
+        let isGameStarted = false;
+        let gameInterval;
+
+        startGameButton.addEventListener("click", function () {
+            startGame();
+        });
+
+        function startGame() {
+            startGameButton.style.display = "none"; // 开始游戏图片消失
+            isGameStarted = true;
+
+            document.body.style.cursor = "none"; // 鼠标消失
+            goldRodentImage.style.display = "none"; // 金箍棒图片隐藏
+
+            gameInterval = setInterval(refreshPosition, 2000); // 每两秒刷新白骨精位置
+
+            const gameContainer = document.getElementById("game-container");
+            gameContainer.addEventListener("click", handleBackgroundClick);
+        }
+
+        function refreshPosition() {
+            if (!isGameStarted) {
+                clearInterval(gameInterval);
+                return;
+            }
+
+            const gameContainer = document.getElementById("game-container");
+            const maxLeft = gameContainer.clientWidth - evilSpiritImage.clientWidth;
+            const maxTop = gameContainer.clientHeight - evilSpiritImage.clientHeight;
+
+            const randomLeft = Math.floor(Math.random() * maxLeft);
+            const randomTop = Math.floor(Math.random() * maxTop);
+
+            evilSpiritImage.style.left = randomLeft + "px";
+            evilSpiritImage.style.top = randomTop + "px";
+        }
+
+        function handleBackgroundClick(event) {
+            if (event.target === evilSpiritImage) {
+                score++;
+                refreshPosition();
+
+                if (score === 3) {
+                    gameOver();
+                }
+            }
+        }
+
+        function gameOver() {
+            isGameStarted = false;
+            clearInterval(gameInterval);
+
+            evilSpiritImage.style.display = "none";
+            goldRodentImage.style.display = "none";
+            gameOverImage.style.display = "block";
+            document.removeEventListener('mousemove', moveGoldRodent);
+        }
+
+        function moveGoldRodent(e) {
+            if (isGameStarted) {
+                goldRodentImage.style.display = "inline-block"; // 金箍棒图片显示
+                goldRodentImage.style.left = e.pageX + 'px';
+                goldRodentImage.style.top = e.pageY + 'px';
+            }
+        }
+
+        document.addEventListener('mousemove', moveGoldRodent);
+
+        let countdown = 15;
+        const countdownElement = document.getElementById("countdown");
+        const gameFailImage = document.getElementById("game-fail");
+
+        function startGame() {
+            startGameButton.style.display = "none"; // 开始游戏图片消失
+            isGameStarted = true;
+
+            document.body.style.cursor = "none"; // 鼠标消失
+            goldRodentImage.style.display = "none"; // 金箍棒图片隐藏
+            evilSpiritImage.style.display = "inline-block"; // 游戏开始后，白骨精图片显示
+
+            gameInterval = setInterval(refreshPosition, 2000); // 每两秒刷新白骨精位置
+
+            const gameContainer = document.getElementById("game-container");
+            gameContainer.addEventListener("click", handleBackgroundClick);
+
+            // 开始倒计时
+            countdownElement.innerText = countdown + 'S';
+            let countdownInterval = setInterval(function() {
+                countdown--;
+                countdownElement.innerText = countdown + 'S';
+                if (countdown === 0) {
+                    clearInterval(countdownInterval);
+                    gameOver();
+                }
+            }, 1000);
+        }
+
+        function gameOver() {
+            isGameStarted = false;
+            clearInterval(gameInterval);
+
+            evilSpiritImage.style.display = "none"; // 隐藏"白骨精"图片
+            goldRodentImage.style.display = "none"; // 隐藏"金箍棒"图片
+            gameOverImage.style.display = "none"; // 隐藏"游戏成功"图片
+            gameFailImage.style.display = "block"; // 显示"游戏失败"图片
+        }
+        function gameOver() {
+            isGameStarted = false;
+            clearInterval(gameInterval);
+
+            evilSpiritImage.style.display = "none"; // 隐藏"白骨精"图片
+            goldRodentImage.style.display = "none"; // 隐藏"金箍棒"图片
+            gameOverImage.style.display = "block"; // 显示"游戏结束"图片
+            countdownElement.style.display = "none"; // 隐藏倒计时
+            document.body.style.cursor = "auto"; // 鼠标出现
+        }
+        function gameOver() {
+            isGameStarted = false;
+            clearInterval(gameInterval);
+
+            evilSpiritImage.style.display = "none"; // 隐藏"白骨精"图片
+            goldRodentImage.style.display = "none"; // 隐藏"金箍棒"图片
+            countdownElement.style.display = "none"; // 隐藏倒计时
+            document.body.style.cursor = "auto"; // 鼠标出现
+
+            if (score < 3) {
+                gameFailImage.style.display = "block"; // 显示"游戏失败"图片
+            } else {
+                gameOverImage.style.display = "block"; // 显示"游戏结束"图片
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
